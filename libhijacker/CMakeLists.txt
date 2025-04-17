@@ -2,7 +2,7 @@
 # PS5SDK - Example: pipe pirate
 # Uses the read/write primitive to read and write some kernel data.
 # @authors ChendoChap, Specter, Znullptr
-###################################################################################################
+####################################################################################################
 
 cmake_minimum_required (VERSION 3.20)
 
