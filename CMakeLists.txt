@@ -15,7 +15,6 @@ add_subdirectory(libhijacker)
 
 
 add_subdirectory(Plugin_samples/Illusion_cheats)
-add_subdirectory(Plugin_samples/PS5Debug)
 add_subdirectory(Plugin_samples/utility_daemon)
 add_subdirectory(Plugin_samples/itemzflow_xml_patches)
 add_subdirectory(Plugin_samples/PS5Debug)
