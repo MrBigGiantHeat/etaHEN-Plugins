@@ -12,12 +12,12 @@ include_directories(SYSTEM "${PS5_PAYLOAD_SDK}")
 include_directories(SYSTEM "${PS5_PAYLOAD_SDK}/include")
 
 add_subdirectory(libhijacker)
-add_subdirectory(Illusion_cheats)
+add_subdirectory(daemon)
 add_subdirectory(daemon_shim)
 add_subdirectory(spawner)
 
 
-# add_subdirectory(Plugin_samples/Illusion_cheats)
+# add_subdirectory(Plugin_samples/daemon)
 # add_subdirectory(Plugin_samples/daemon_shim)
 # add_subdirectory(Plugin_samples/utility_daemon)
 # add_subdirectory(Plugin_samples/itemzflow_xml_patches)

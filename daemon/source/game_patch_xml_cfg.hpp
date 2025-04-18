@@ -7,4 +7,4 @@
 #define BASE_ETAHEN_PATCH_SETTINGS_PATH BASE_ETAHEN_PATCH_PATH "/" "settings"
 #define BASE_ETAHEN_PATCH_DATA_PATH_PS4 BASE_ETAHEN_PATH "/" BASE_PATCH_NAME "/" "xml"
 #define BASE_ETAHEN_PATCH_DATA_PATH_PS5 BASE_ETAHEN_PATH "/" BASE_PATCH_NAME "/" "xml_prospero"
-#define XML_PATH_LIST "/data/game_patch_fliprate_list.xml"//"Plugin_samples/Illusion_cheats/data/game_patch_fliprate_list.xml"
+#define XML_PATH_LIST "/data/game_patch_fliprate_list.xml"//"Plugin_samples/daemon/data/game_patch_fliprate_list.xml"
