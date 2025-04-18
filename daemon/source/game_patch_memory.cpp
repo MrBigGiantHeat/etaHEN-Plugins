@@ -113,7 +113,7 @@ void write_bytes(pid_t pid, uint64_t addr, const char *hexString, enum write_fla
 	dump_bytes_vm(pid, addr, bytesize);
 	if (byteArray)
 	{
-		printf("freeing byteArray at 0x%p\n", byteArray);
+		// printf("freeing byteArray at 0x%p\n", byteArray);
 		free(byteArray);
 	}
 	if (special_flag & isOffsetVideoModeSupported &&

@@ -243,7 +243,7 @@ static bool handleIpc(const int syscore, const int fd) noexcept {
 
 		const uintptr_t nanosleepOffset = getNanosleepOffset(*spawned);
 
-		printf("libkernel imagebase: 0x%08llx\n", spawned->getLibKernelBase());
+		// printf("libkernel imagebase: 0x%08llx\n", spawned->getLibKernelBase());
 
 		puts("spawned process obtained");
 
@@ -262,7 +262,7 @@ static bool handleIpc(const int syscore, const int fd) noexcept {
 		dbg::write(pid, base + ENTRYPOINT_OFFSET, loop.data, sizeof(loop.data));
 
 		puts("finished");
-		printf("spawned imagebase 0x%08llx\n", base);
+		// printf("spawned imagebase 0x%08llx\n", base);
 	}
 
 	auto path = getProc(pid)->getPath();
@@ -315,10 +315,10 @@ void dummy(int) {}
 #define BUILD_MSG "Non Rest Mode Build"
 #endif
 
-#ifdef RESTMODE
-#pragma message("Build with Rest Mode, Host features are not available.")
-void *hookThread(void *args) noexcept {
-#else
+// #ifdef RESTMODE
+// #pragma message("Build with Rest Mode, Host features are not available.")
+// void *hookThread(void *args) noexcept {
+// #else
 #pragma message("Build without Rest Mode, Host features are available.")
 static void *hookThread(void *args) noexcept {
 #endif	
