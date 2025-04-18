@@ -186,108 +186,108 @@ static void killApp(int pid) noexcept {
 	}
 }
 
-static bool handleIpc(const int syscore, const int fd) noexcept {
-	static constexpr int PING =  0;
-	static constexpr int PONG =  1;
-	static constexpr int PROCESS_LAUNCHED = 1;
+// static bool handleIpc(const int syscore, const int fd) noexcept {
+// 	static constexpr int PING =  0;
+// 	static constexpr int PONG =  1;
+// 	static constexpr int PROCESS_LAUNCHED = 1;
 
-	bool result = true;
+// 	bool result = true;
 
-	struct result {
-		int cmd;
-		int pid;
-		uintptr_t func;
-	} res{};
+// 	struct result {
+// 		int cmd;
+// 		int pid;
+// 		uintptr_t func;
+// 	} res{};
 
-	if (recv(fd, &res, sizeof(res), MSG_NOSIGNAL) == -1) {
-		printf("reading result failed\n");
-		return result;
-	}
+// 	if (recv(fd, &res, sizeof(res), MSG_NOSIGNAL) == -1) {
+// 		printf("reading result failed\n");
+// 		return result;
+// 	}
 
-	if (res.cmd == PING) {
-		int reply = PONG;
-		if (_write(fd, &reply, sizeof(reply)) == -1) {
-			printf("writing pong failed\n");
-			return result;
-		}
-		if (recv(fd, &res, sizeof(res), MSG_NOSIGNAL) == -1) {
-			printf("reading result failed\n");
-			return result;
-		}
-	}
+// 	if (res.cmd == PING) {
+// 		int reply = PONG;
+// 		if (_write(fd, &reply, sizeof(reply)) == -1) {
+// 			printf("writing pong failed\n");
+// 			return result;
+// 		}
+// 		if (recv(fd, &res, sizeof(res), MSG_NOSIGNAL) == -1) {
+// 			printf("reading result failed\n");
+// 			return result;
+// 		}
+// 	}
 
-	if (res.cmd != PROCESS_LAUNCHED) {
-		printf("unexpected command %d\n", res.cmd);
-		return result;
-	}
+// 	if (res.cmd != PROCESS_LAUNCHED) {
+// 		printf("unexpected command %d\n", res.cmd);
+// 		return result;
+// 	}
 
-	result = false;
+// 	result = false;
 
-	LoopBuilder loop = SLEEP_LOOP;
-	const int pid = res.pid;
+// 	LoopBuilder loop = SLEEP_LOOP;
+// 	const int pid = res.pid;
 
-	UniquePtr<Hijacker> spawned = nullptr;
-	{
-		dbg::Tracer tracer{pid};
-		auto regs = tracer.getRegisters();
-		regs.rip(res.func);
-		tracer.setRegisters(regs);
+// 	UniquePtr<Hijacker> spawned = nullptr;
+// 	{
+// 		dbg::Tracer tracer{pid};
+// 		auto regs = tracer.getRegisters();
+// 		regs.rip(res.func);
+// 		tracer.setRegisters(regs);
 
-		// run until execve completion
-		tracer.run();
+// 		// run until execve completion
+// 		tracer.run();
 
-		while (spawned == nullptr) {
-			// this should grab it first try but I haven't confirmed yet
-			spawned = Hijacker::getHijacker(pid);
-		}
+// 		while (spawned == nullptr) {
+// 			// this should grab it first try but I haven't confirmed yet
+// 			spawned = Hijacker::getHijacker(pid);
+// 		}
 
-		const uintptr_t nanosleepOffset = getNanosleepOffset(*spawned);
+// 		const uintptr_t nanosleepOffset = getNanosleepOffset(*spawned);
 
-		// printf("libkernel imagebase: 0x%08llx\n", spawned->getLibKernelBase());
+// 		// printf("libkernel imagebase: 0x%08llx\n", spawned->getLibKernelBase());
 
-		puts("spawned process obtained");
+// 		puts("spawned process obtained");
 
-		puts("success");
+// 		puts("success");
 
-		uintptr_t base = 0;
-		while (base == 0) {
-			// this should also work first try but not confirmed
-			base = spawned->getLibKernelBase();
-		}
+// 		uintptr_t base = 0;
+// 		while (base == 0) {
+// 			// this should also work first try but not confirmed
+// 			base = spawned->getLibKernelBase();
+// 		}
 
-		loop.setTarget(base + nanosleepOffset);
-		base = spawned->imagebase();
+// 		loop.setTarget(base + nanosleepOffset);
+// 		base = spawned->imagebase();
 
-		// force the entrypoint to an infinite loop so that it doesn't start until we're ready
-		dbg::write(pid, base + ENTRYPOINT_OFFSET, loop.data, sizeof(loop.data));
+// 		// force the entrypoint to an infinite loop so that it doesn't start until we're ready
+// 		dbg::write(pid, base + ENTRYPOINT_OFFSET, loop.data, sizeof(loop.data));
 
-		puts("finished");
-		// printf("spawned imagebase 0x%08llx\n", base);
-	}
+// 		puts("finished");
+// 		// printf("spawned imagebase 0x%08llx\n", base);
+// 	}
 
-	auto path = getProc(pid)->getPath();
-	auto index = path.rfind('/');
-	if (index == -1) {
-		printf("path missing / : %s\n", path.c_str());
-	} else {
-		path = path.substring(0, index + 1) + "homebrew.elf";
-		printf("loading elf %s\n", path.c_str());
-	}
-	auto data = readFileIntoBuffer(path.c_str());
-	if (data == nullptr) {
-		puts("failed to read elf");
-		killApp(pid);
-		return result;
-	}
+// 	auto path = getProc(pid)->getPath();
+// 	auto index = path.rfind('/');
+// 	if (index == -1) {
+// 		printf("path missing / : %s\n", path.c_str());
+// 	} else {
+// 		path = path.substring(0, index + 1) + "homebrew.elf";
+// 		printf("loading elf %s\n", path.c_str());
+// 	}
+// 	auto data = readFileIntoBuffer(path.c_str());
+// 	if (data == nullptr) {
+// 		puts("failed to read elf");
+// 		killApp(pid);
+// 		return result;
+// 	}
 
-	if (load(spawned, data.get())) {
-		puts("elf loaded");
-	} else {
-		puts("failed to load elf");
-		killApp(pid);
-	}
-	return result;
-}
+// 	if (load(spawned, data.get())) {
+// 		puts("elf loaded");
+// 	} else {
+// 		puts("failed to load elf");
+// 		killApp(pid);
+// 	}
+// 	return result;
+// }
 
 class UnixSocket : public FileDescriptor {
 	const char *path;
