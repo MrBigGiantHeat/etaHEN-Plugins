@@ -47,7 +47,7 @@ jobs:
       run: bash ./build.sh
 
     - name: list
-      run: ls -l
+      run: ls libhijacker
 
     # - name: Upload artifacts
     #   uses: actions/upload-artifact@main
