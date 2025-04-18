@@ -132,12 +132,6 @@ void write_bytes(pid_t pid, uint64_t addr, const char *hexString, enum write_fla
 	}
 }
 
-void write_bytes(pid_t pid, uint64_t addr, void* bytes_data, size_t bytes_size)
-{
-	dump_bytes_vm(pid, addr, bytes_size);
-	dbg::write(pid, addr, bytes_data, bytes_size);
-	dump_bytes_vm(pid, addr, bytes_size);
-}
 void write_bytes32(pid_t pid, uint64_t addr, const uint32_t val)
 {
 	_printf("addr: 0x%lx\n", addr);
