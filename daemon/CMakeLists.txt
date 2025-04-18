@@ -6,7 +6,7 @@
 
 cmake_minimum_required (VERSION 3.20)
 
-set(basename "illusion_cheats")
+set(basename "daemon")
 project(${basename} C CXX)
 
 set(PLUGIN_TITLE_ID "ILLU00000")
