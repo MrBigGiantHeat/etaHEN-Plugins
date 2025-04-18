@@ -319,31 +319,31 @@ void dummy(int) {}
 // #pragma message("Build with Rest Mode, Host features are not available.")
 // void *hookThread(void *args) noexcept {
 // #else
-#pragma message("Build without Rest Mode, Host features are available.")
-static void *hookThread(void *args) noexcept {
-#endif	
-	signal(SIGUSR1, dummy);
+// #pragma message("Build without Rest Mode, Host features are available.")
+// static void *hookThread(void *args) noexcept {
+// #endif	
+// 	signal(SIGUSR1, dummy);
 
-	UnixSocket *serverSock = reinterpret_cast<UnixSocket *>(args);
-	if (*serverSock == -1) {
-		printf("networkListen %i\n", (int) *serverSock);
-		return 0;
-	}
+// 	UnixSocket *serverSock = reinterpret_cast<UnixSocket *>(args);
+// 	if (*serverSock == -1) {
+// 		printf("networkListen %i\n", (int) *serverSock);
+// 		return 0;
+// 	}
 
-	const int syscore = getppid();
-	FileDescriptor fd = accept(*serverSock, nullptr, nullptr);
-	while (true) {
-		if (handleIpc(syscore, fd)) {
-			fd = accept(*serverSock, nullptr, nullptr);
-			if (fd == -1) {
-				// we're done
-				return 0;
-			}
-		}
-	}
+// 	const int syscore = getppid();
+// 	FileDescriptor fd = accept(*serverSock, nullptr, nullptr);
+// 	while (true) {
+// 		if (handleIpc(syscore, fd)) {
+// 			fd = accept(*serverSock, nullptr, nullptr);
+// 			if (fd == -1) {
+// 				// we're done
+// 				return 0;
+// 			}
+// 		}
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
 
 int main() {
 	puts("daemon entered");
