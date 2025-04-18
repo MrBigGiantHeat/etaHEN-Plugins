@@ -12,9 +12,9 @@ include_directories(SYSTEM "${PS5_PAYLOAD_SDK}")
 include_directories(SYSTEM "${PS5_PAYLOAD_SDK}/include")
 
 add_subdirectory(libhijacker)
-add_subdirectory(daemon)
-add_subdirectory(daemon_shim)
-add_subdirectory(spawner)
+# add_subdirectory(daemon)
+# add_subdirectory(daemon_shim)
+# add_subdirectory(spawner)
 
 
 # add_subdirectory(Plugin_samples/daemon)
