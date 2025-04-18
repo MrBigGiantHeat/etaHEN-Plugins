@@ -41,7 +41,7 @@ set(D_SRC ${D_CWD}/source)
 file(GLOB SrcFiles ${D_SRC}/*.c ${D_SRC}/*.cpp ${D_SRC}/**/*.cpp ${D_SRC}/*.h ${D_SRC}/*.hpp ${D_SRC}/**/*.hpp ${D_SRC}/*.s)
 
 add_library(${PROJECT_NAME} STATIC ${SrcFiles})
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${PROJECT_NAME}")
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${PROJECT_NAME}.elf")
 
 # Must build with clang
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "[Cc]lang")
