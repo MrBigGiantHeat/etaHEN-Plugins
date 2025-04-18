@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <sys/types.h>
 #include "dbg/dbg.hpp"
 #include "elf/elf.hpp"
 #include "fd.hpp"
