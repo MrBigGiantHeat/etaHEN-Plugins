@@ -47,29 +47,29 @@ struct LoopBuilder {
 	}
 };
 
-static inline constexpr LoopBuilder SLEEP_LOOP{
-	// // 48 b8 xx xx xx xx xx xx xx xx 48 c7 c7 40 42 0f 00 ff d0 eb eb
-	//loop:
-	//	MOV RAX, _nanosleep
-	0x48, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	// MOV RDI, 1000000000 // 1 second
-	0x48, 0xc7, 0xc7, 0x00, 0xca, 0x9a, 0x3b,
-	// MOV RSI, 0
-	0x48, 0xc7, 0xc6, 0x00, 0x00, 0x00, 0x00,
-	// PUSH RDI
-	0x57,
-	// PUSH RSI
-	0x56,
-	// CALL RAX
-	0xff, 0xd0,
-	// JMP loop
-	0xeb, 0xe2
-};
+// static inline constexpr LoopBuilder SLEEP_LOOP{
+// 	// // 48 b8 xx xx xx xx xx xx xx xx 48 c7 c7 40 42 0f 00 ff d0 eb eb
+// 	//loop:
+// 	//	MOV RAX, _nanosleep
+// 	0x48, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+// 	// MOV RDI, 1000000000 // 1 second
+// 	0x48, 0xc7, 0xc7, 0x00, 0xca, 0x9a, 0x3b,
+// 	// MOV RSI, 0
+// 	0x48, 0xc7, 0xc6, 0x00, 0x00, 0x00, 0x00,
+// 	// PUSH RDI
+// 	0x57,
+// 	// PUSH RSI
+// 	0x56,
+// 	// CALL RAX
+// 	0xff, 0xd0,
+// 	// JMP loop
+// 	0xeb, 0xe2
+// };
 
-static uintptr_t getNanosleepOffset(const Hijacker &hijacker) {
-	uintptr_t addr = hijacker.getLibKernelFunctionAddress(nid::_nanosleep);
-	return addr - hijacker.getLibKernelBase();
-}
+// static uintptr_t getNanosleepOffset(const Hijacker &hijacker) {
+// 	uintptr_t addr = hijacker.getLibKernelFunctionAddress(nid::_nanosleep);
+// 	return addr - hijacker.getLibKernelBase();
+// }
 
 struct Helper {
 	uintptr_t nanosleepOffset;
@@ -92,21 +92,22 @@ static bool runElf(Hijacker *hijacker, uint8_t *data) {
 	return false;
 }
 
-static bool load(UniquePtr<Hijacker> &spawned, uint8_t *data) {
-	puts("setting process name");
-	spawned->getProc()->setName("HomebrewDaemon"_sv);
-	__builtin_printf("new process %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
-	puts("jailbreaking new process");
-	spawned->jailbreak(false);
+// -----------------------------------------------------------------------------
+// static bool load(UniquePtr<Hijacker> &spawned, uint8_t *data) {
+// 	puts("setting process name");
+// 	spawned->getProc()->setName("HomebrewDaemon"_sv);
+// 	__builtin_printf("new process %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
+// 	puts("jailbreaking new process");
+// 	spawned->jailbreak(false);
 
-	// listen on a port for now. in the future embed the daemon and load directly
+// 	// listen on a port for now. in the future embed the daemon and load directly
 
-	if (runElf(spawned.get(), data)) {
-		__builtin_printf("process name %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
-		return true;
-	}
-	return false;
-}
+// 	if (runElf(spawned.get(), data)) {
+// 		__builtin_printf("process name %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
+// 		return true;
+// 	}
+// 	return false;
+// }
 
 // Function to read a file into memory using calloc
 UniquePtr<uint8_t[]> readFileIntoBuffer(const char *filename) {
