@@ -104,7 +104,7 @@ static TitleId getNextAvailableTitleId() noexcept {
 	for (uint8_t i = 1; i < MAX_HOMEBREW_APPS; i++) {
 		auto appId = sceSystemServiceGetAppId((++res).id);
 		if (appId == -1) {
-			printf("Next id: %s\n", res.id);
+			// printf("Next id: %s\n", res.id);
 			return res;
 		}
 	}
@@ -113,7 +113,7 @@ static TitleId getNextAvailableTitleId() noexcept {
 
 static bool killApp(uint32_t appId) {
 	uint32_t res = sceLncUtilKillApp(appId);
-	printf("sceApplicationKill returned 0x%llx\n", res);
+	// printf("sceApplicationKill returned 0x%llx\n", res);
 	return true;
 }
 
@@ -236,21 +236,21 @@ void ElfServer::run(TcpSocket &sock) {
 		return;
 	}
 
-	printf("elf type %d\n", type);
+	// printf("elf type %d\n", type);
 
 	char name[MAX_NAME_SIZE]{};
 	if (!sock.read(name, sizeof(name))) {
 		return;
 	}
 
-	printf("name: %s\n", name);
+	// printf("name: %s\n", name);
 
 	size_t elfSize = 0;
 	if (!sock.read(&elfSize, sizeof(elfSize))) {
 		return;
 	}
 
-	printf("elf size %llu\n", elfSize);
+	// printf("elf size %llu\n", elfSize);
 
 	UniquePtr<uint8_t[]> buf = new uint8_t[elfSize];
 	if (!sock.read(buf.get(), sizeof(elfSize))) {
@@ -311,7 +311,7 @@ void ElfServer::run(TcpSocket &sock) {
 		return;
 	}
 
-	printf("successfully launched %s\n", name);
+	// printf("successfully launched %s\n", name);
 
 	response = ResponseType::OK;
 
@@ -330,19 +330,19 @@ static void *doLaunchApp(void *ptr) {
 	LncAppParam param{sizeof(LncAppParam), args->id, 0, 0, flag};
 
 	int err = sceLncUtilLaunchApp(args->titleId, nullptr, &param);
-	printf("sceLncUtilLaunchApp returned 0x%llx\n", (uint32_t)err);
+	// printf("sceLncUtilLaunchApp returned 0x%llx\n", (uint32_t)err);
 	if (err >= 0) {
 		return nullptr;
 	}
 	switch ((uint32_t) err) {
 		case SCE_LNC_UTIL_ERROR_ALREADY_RUNNING:
-			printf("app %s is already running\n", args->titleId);
+			// printf("app %s is already running\n", args->titleId);
 			break;
 		case SCE_LNC_ERROR_APP_NOT_FOUND:
-			printf("app %s not found\n", args->titleId);
+			// printf("app %s not found\n", args->titleId);
 			break;
 		default:
-			printf("unknown error 0x%llx\n", (uint32_t) err);
+			// printf("unknown error 0x%llx\n", (uint32_t) err);
 			break;
 	}
 	return nullptr;
@@ -353,10 +353,10 @@ static pthread_t launchAppThread(const char *titleId, int *appId) {
 	uint32_t id = -1;
 	uint32_t res = sceUserServiceGetForegroundUser(&id);
 	if (res != 0) {
-		printf("sceUserServiceGetForegroundUser failed: 0x%llx\n", res);
+		// printf("sceUserServiceGetForegroundUser failed: 0x%llx\n", res);
 		return nullptr;
 	}
-	printf("user id %u\n", id);
+	// printf("user id %u\n", id);
 
 	// the thread will clean this up
 	LaunchArgs *args = new LaunchArgs{titleId, id, appId}; // NOLINT(*)
@@ -450,7 +450,7 @@ static pid_t launchApp(const char *titleId, int *appId, ProcessType type) {
 	// get the pid of the new process as soon as it is created
 	int pid = getNextPid(lastPid, type);
 
-	printf("found new pid %d\n", pid);
+	// printf("found new pid %d\n", pid);
 
 	UniquePtr<Hijacker> spawned = nullptr;
 	{
@@ -483,7 +483,7 @@ static pid_t launchApp(const char *titleId, int *appId, ProcessType type) {
 		pthread_join(td, nullptr);
 
 		puts("finished");
-		printf("spawned imagebase 0x%08llx\n", base);
+		// printf("spawned imagebase 0x%08llx\n", base);
 	}
 
 	//GameServer gs{pid};
