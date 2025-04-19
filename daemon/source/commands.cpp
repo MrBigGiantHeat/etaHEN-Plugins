@@ -4,7 +4,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <sys/types.h>
 #include "dbg/dbg.hpp"
 #include "elf/elf.hpp"
 #include "fd.hpp"
@@ -85,7 +84,7 @@ void CommandServer::run(TcpSocket &sock) {
 				replyError(sock);
 				break;
 			}
-			printf("id: 0x%lx\n", id);
+			// printf("id: 0x%lx\n", id);
 			if (!killApp(id)) {
 				replyError(sock);
 				break;
@@ -109,7 +108,7 @@ static void __attribute__((constructor)) initUserService() {
 
 static bool killApp(uint32_t appId) {
 	uint32_t res = sceLncUtilKillApp(appId);
-	printf("sceApplicationKill returned 0x%llx\n", res);
+	// printf("sceApplicationKill returned 0x%llx\n", res);
 	return true;
 }
 
@@ -125,7 +124,7 @@ static void *doLaunchApp(void *ptr) {
 	LncAppParam param{sizeof(LncAppParam), args->id, 0, 0, flag};
 
 	int err = sceLncUtilLaunchApp(args->titleId, nullptr, &param);
-	printf("sceLncUtilLaunchApp returned 0x%llx\n", (uint32_t)err);
+	// printf("sceLncUtilLaunchApp returned 0x%llx\n", (uint32_t)err);
 	if (err >= 0) {
 		return nullptr;
 	}
@@ -137,7 +136,7 @@ static void *doLaunchApp(void *ptr) {
 			printf("app %s not found\n", args->titleId);
 			break;
 		default:
-			printf("unknown error 0x%llx\n", (uint32_t) err);
+			// printf("unknown error 0x%llx\n", (uint32_t) err);
 			break;
 	}
 	return nullptr;
@@ -148,7 +147,7 @@ static pthread_t launchAppThread(const char *titleId, int *appId) {
 	uint32_t id = -1;
 	uint32_t res = sceUserServiceGetForegroundUser(&id);
 	if (res != 0) {
-		printf("sceUserServiceGetForegroundUser failed: 0x%llx\n", res);
+		// printf("sceUserServiceGetForegroundUser failed: 0x%llx\n", res);
 		return nullptr;
 	}
 	printf("user id %u\n", id);
@@ -264,7 +263,7 @@ static bool launchApp(const char *titleId) {
 			spawned = Hijacker::getHijacker(pid);
 		}
 
-		printf("libkernel imagebase: 0x%08llx\n", spawned->getLibKernelBase());
+		// printf("libkernel imagebase: 0x%08llx\n", spawned->getLibKernelBase());
 
 		puts("spawned process obtained");
 
@@ -280,7 +279,7 @@ static bool launchApp(const char *titleId) {
 		pthread_join(td, nullptr);
 
 		puts("finished");
-		printf("spawned imagebase 0x%08llx\n", base);
+		// printf("spawned imagebase 0x%08llx\n", base);
 
 		tracer.run();
 	}
