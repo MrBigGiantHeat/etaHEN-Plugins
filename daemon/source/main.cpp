@@ -71,10 +71,10 @@ struct LoopBuilder {
 // 	return addr - hijacker.getLibKernelBase();
 // }
 
-struct Helper {
-	uintptr_t nanosleepOffset;
-	UniquePtr<Hijacker> spawned;
-};
+// struct Helper {
+// 	uintptr_t nanosleepOffset;
+// 	UniquePtr<Hijacker> spawned;
+// };
 
 static bool runElf(Hijacker *hijacker, uint8_t *data) {
 
@@ -93,21 +93,21 @@ static bool runElf(Hijacker *hijacker, uint8_t *data) {
 }
 
 // -----------------------------------------------------------------------------
-// static bool load(UniquePtr<Hijacker> &spawned, uint8_t *data) {
-// 	puts("setting process name");
-// 	spawned->getProc()->setName("HomebrewDaemon"_sv);
-// 	__builtin_printf("new process %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
-// 	puts("jailbreaking new process");
-// 	spawned->jailbreak(false);
+static bool load(UniquePtr<Hijacker> &spawned, uint8_t *data) {
+	puts("setting process name");
+	spawned->getProc()->setName("HomebrewDaemon"_sv);
+	__builtin_printf("new process %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
+	puts("jailbreaking new process");
+	spawned->jailbreak(false);
 
-// 	// listen on a port for now. in the future embed the daemon and load directly
+	// listen on a port for now. in the future embed the daemon and load directly
 
-// 	if (runElf(spawned.get(), data)) {
-// 		__builtin_printf("process name %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
-// 		return true;
-// 	}
-// 	return false;
-// }
+	if (runElf(spawned.get(), data)) {
+		__builtin_printf("process name %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
+		return true;
+	}
+	return false;
+}
 
 // Function to read a file into memory using calloc
 UniquePtr<uint8_t[]> readFileIntoBuffer(const char *filename) {
