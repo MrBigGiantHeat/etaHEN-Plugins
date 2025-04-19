@@ -107,7 +107,7 @@ static void __attribute__((constructor)) initUserService() {
 }
 
 static bool killApp(uint32_t appId) {
-	uint32_t res = sceLncUtilKillApp(appId);
+	[[maybe_unused]] uint32_t res = sceLncUtilKillApp(appId);
 	// printf("sceApplicationKill returned 0x%llx\n", res);
 	return true;
 }
