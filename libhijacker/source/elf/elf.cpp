@@ -16,7 +16,8 @@ extern "C" {
 	#include <sys/_stdint.h>
 	#include <stdint.h>
 	#include <sys/elf64.h>
-	#include <ps5/payload_main.h>
+	// #include <ps5/payload_main.h>
+	#include <ps5/payload.h>
 	int puts(const char *);
 	int usleep(unsigned int useconds);
 	uintptr_t mmap(uintptr_t, size_t, int, int, int, off_t);
