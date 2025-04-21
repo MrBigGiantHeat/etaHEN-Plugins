@@ -35,7 +35,7 @@ void AbortServer::run(TcpSocket &sock) {
 	sock.close();
 }
 
-static constexpr uintptr_t ENTRYPOINT_OFFSET = 0x70;
+[[maybe_unused]] static constexpr uintptr_t ENTRYPOINT_OFFSET = 0x70;
 
 struct LoopBuilder {
 	static constexpr size_t LOOB_BUILDER_SIZE = 39;
@@ -93,7 +93,7 @@ static bool runElf(Hijacker *hijacker, uint8_t *data) {
 }
 
 // -----------------------------------------------------------------------------
-static bool load(UniquePtr<Hijacker> &spawned, uint8_t *data) {
+[[maybe_unused]] static bool load(UniquePtr<Hijacker> &spawned, uint8_t *data) {
 	puts("setting process name");
 	spawned->getProc()->setName("HomebrewDaemon"_sv);
 	__builtin_printf("new process %s pid %d\n", spawned->getProc()->getSelfInfo()->name, spawned->getPid());
@@ -179,7 +179,7 @@ int networkListen(const char* soc_path) {
 extern "C" uint32_t _sceApplicationGetAppId(int pid, uint32_t *appId);
 extern "C" uint32_t sceLncUtilKillApp(uint32_t appId);
 
-static void killApp(int pid) noexcept {
+[[maybe_unused]] static void killApp(int pid) noexcept {
 	uint32_t appId = 0;
 	_sceApplicationGetAppId(pid, &appId);
 	if (appId != 0) {
